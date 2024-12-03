@@ -1,5 +1,6 @@
 class TodoData {
   String content;
   bool checked;
-  TodoData({required this.checked, required this.content});
+  bool loved;
+  TodoData({required this.checked, required this.content, required this.loved});
 }

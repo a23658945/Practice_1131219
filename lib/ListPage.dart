@@ -46,6 +46,7 @@ class _ListPageState extends State<ListPage> {
               return Tasklist(
                   checked: item.checked,
                   content: item.content,
+                  loved: item.loved,
                   onCheckedChanged: (bool? newValue) {
                     setState(() {
                       task[index].checked = newValue ?? false;
@@ -64,7 +65,8 @@ class _ListPageState extends State<ListPage> {
           final result = await Navigator.pushNamed(context, '/ContentPage');
           if (result != null && result != '') {
             setState(() {
-              task.add(TodoData(checked: false, content: result.toString()));
+              task.add(TodoData(
+                  checked: false, content: result.toString(), loved: false));
             });
           }
 

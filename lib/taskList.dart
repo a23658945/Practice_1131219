@@ -5,8 +5,10 @@ class Tasklist extends StatefulWidget {
       {super.key,
       required this.checked,
       required this.content,
+      required this.loved,
       required this.onCheckedChanged});
   bool checked;
+  bool loved;
   String content;
   final Function(bool?) onCheckedChanged;
 
@@ -42,7 +44,18 @@ class _TasklistState extends State<Tasklist> {
                 SizedBox(
                   width: 50,
                 ),
-                IconButton(onPressed: () {}, icon: Icon(Icons.favorite_border)),
+                IconButton(
+                    onPressed: () {
+                      setState(() {
+                        widget.loved = !widget.loved;
+                      });
+                    },
+                    icon: widget.loved
+                        ? Icon(
+                            Icons.favorite,
+                            color: Colors.red,
+                          )
+                        : Icon(Icons.favorite_border)),
                 IconButton(onPressed: () {}, icon: Icon(Icons.edit_note))
               ],
             )));
