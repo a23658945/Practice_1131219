@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'taskList.dart';
+import 'dataList.dart';
 
 class ListPage extends StatefulWidget {
   const ListPage({super.key});
@@ -8,13 +10,12 @@ class ListPage extends StatefulWidget {
 }
 
 class _ListPageState extends State<ListPage> {
-  List<Map<String, dynamic>> task = [{"content":"Eat launch at 12pm",
-    "checked":true
-  }];
+  List<TodoData> task = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text("Task List"),
         actions: [
           IconButton(
@@ -31,40 +32,48 @@ class _ListPageState extends State<ListPage> {
               ))
         ],
       ),
-      body: ListView(
-        children: task.map((e)=>buildListTile(e["checked"],e["content"])
-      ).toList(),
-    ));
+      body: task.isEmpty
+          ? Center(
+              child: Text(
+              "請按右下角按鈕，新增第一筆ToDo!(๑´ㅂ`๑)",
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 20),
+            ))
+          : ListView(
+              children: task.asMap().entries.map((e) {
+              int index = e.key;
+              TodoData item = e.value;
+              return Tasklist(
+                  checked: item.checked,
+                  content: item.content,
+                  onCheckedChanged: (bool? newValue) {
+                    setState(() {
+                      task[index].checked = newValue ?? false;
+                      for (var i in task) {
+                        print(i.checked);
+                      }
+                    });
+                  });
+            }).toList()
+              //  task
+              //     .map((e) => Tasklist(checked: e.checked, content: e.content))
+              //     .toList(),
+              ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          final result = await Navigator.pushNamed(context, '/ContentPage');
+          if (result != null && result != '') {
+            setState(() {
+              task.add(TodoData(checked: false, content: result.toString()));
+            });
+          }
+
+          // for (int i = 0; i < task.length; i++) {
+          //   print(task[i].content);
+          // }
+        },
+        child: Icon(Icons.edit_document),
+      ),
+    );
   }
-}
-
-
-Widget buildListTile(bool checked, String content){
-  return ListTile(
-              leading: Checkbox(value: checked, onChanged: (e) {}),
-              title: Container(
-                height: 50,
-                width: 300,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.all(Radius.circular(15)),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.2), // 陰影顏色與透明度
-                      spreadRadius: 2, // 擴散半徑
-                      blurRadius: 5, // 模糊半徑
-                      offset: Offset(3, 3), // 陰影位移 (x, y)
-                    ),
-                  ],
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text("$content"),
-                    SizedBox(width: 50,),
-                    IconButton(onPressed: (){}, icon: Icon(Icons.favorite_border)),
-                    IconButton(onPressed: (){}, icon: Icon(Icons.edit_note))
-                  ],
-                )
-              ));
 }

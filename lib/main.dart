@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'example_1.dart';
-import 'exTextfield_2.dart';
+import 'ContentPage.dart';
 import 'ListPage.dart';
+
 void main() {
   runApp(const MainApp());
 }
@@ -11,16 +11,14 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
       initialRoute: '/ListPage',
-      routes:{
-        '/':(context)=>Scaffold(body: ExTextField_1()),
-        '/ListPage':(context)=>ListPage()
-        
+      routes: {
+        // '/': (context) => Scaffold(body: ExTextField_1()),
+        '/ListPage': (context) => ListPage(),
+        '/ContentPage': (context) => ContentPage()
       },
-     
     );
   }
 }
-
