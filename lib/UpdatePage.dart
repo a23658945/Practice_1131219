@@ -1,14 +1,21 @@
 import 'package:flutter/material.dart';
+import 'dataList.dart';
 
-class ContentPage extends StatefulWidget {
-  const ContentPage({super.key});
+class Updatepage extends StatefulWidget {
+  Updatepage({super.key, required this.task});
+  TodoData task; // checked, content, loved
 
   @override
-  State<ContentPage> createState() => _ContentPageState();
+  State<Updatepage> createState() => _UpdatepageState();
 }
 
-class _ContentPageState extends State<ContentPage> {
+class _UpdatepageState extends State<Updatepage> {
   TextEditingController _contentcontroller = TextEditingController();
+  @override
+  void initState() {
+    super.initState();
+    _contentcontroller.text = widget.task.content;
+  }
 
   @override
   void dispose() {
@@ -21,7 +28,7 @@ class _ContentPageState extends State<ContentPage> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Text("Create a task"),
+        title: Text("Update task"),
       ),
       body: Center(
         child: Column(
@@ -93,6 +100,7 @@ class _ContentPageState extends State<ContentPage> {
             ),
             ElevatedButton(
                 onPressed: () {
+                  print("Update:${_contentcontroller.text}");
                   Navigator.pop(context, _contentcontroller.text);
                   // Navigator.pushNamed(context, "/ListPage");
                 },

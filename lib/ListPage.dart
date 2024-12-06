@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:practice_1131127/LovedPage.dart';
 import 'taskList.dart';
 import 'dataList.dart';
 
@@ -19,7 +20,12 @@ class _ListPageState extends State<ListPage> {
         title: Text("Task List"),
         actions: [
           IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => Lovedpage(tasks: task)));
+              },
               icon: Icon(
                 Icons.favorite,
                 color: Colors.red,
@@ -44,17 +50,23 @@ class _ListPageState extends State<ListPage> {
               int index = e.key;
               TodoData item = e.value;
               return Tasklist(
-                  checked: item.checked,
-                  content: item.content,
-                  loved: item.loved,
-                  onCheckedChanged: (bool? newValue) {
-                    setState(() {
-                      task[index].checked = newValue ?? false;
-                      for (var i in task) {
-                        print(i.checked);
-                      }
-                    });
+                checked: item.checked,
+                content: item.content,
+                loved: item.loved,
+                onCheckedChanged: (bool? newValue) {
+                  setState(() {
+                    task[index].checked = newValue ?? false;
+                    for (var i in task) {
+                      print(i.checked);
+                    }
                   });
+                },
+                onLoveChanged: (bool value) {
+                  setState(() {
+                    task[index].loved = value;
+                  });
+                },
+              );
             }).toList()
               //  task
               //     .map((e) => Tasklist(checked: e.checked, content: e.content))

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'dataList.dart';
+import 'UpdatePage.dart';
 
 class Tasklist extends StatefulWidget {
   Tasklist(
@@ -6,12 +8,13 @@ class Tasklist extends StatefulWidget {
       required this.checked,
       required this.content,
       required this.loved,
-      required this.onCheckedChanged});
+      required this.onCheckedChanged,
+      required this.onLoveChanged});
   bool checked;
   bool loved;
   String content;
   final Function(bool?) onCheckedChanged;
-
+  final Function(bool) onLoveChanged;
   @override
   State<Tasklist> createState() => _TasklistState();
 }
@@ -19,6 +22,8 @@ class Tasklist extends StatefulWidget {
 class _TasklistState extends State<Tasklist> {
   @override
   Widget build(BuildContext context) {
+    TodoData task = TodoData(
+        checked: widget.checked, content: widget.content, loved: widget.loved);
     return ListTile(
         leading:
             Checkbox(value: widget.checked, onChanged: widget.onCheckedChanged),
@@ -47,7 +52,7 @@ class _TasklistState extends State<Tasklist> {
                 IconButton(
                     onPressed: () {
                       setState(() {
-                        widget.loved = !widget.loved;
+                        widget.onLoveChanged(!widget.loved);
                       });
                     },
                     icon: widget.loved
@@ -56,7 +61,19 @@ class _TasklistState extends State<Tasklist> {
                             color: Colors.red,
                           )
                         : Icon(Icons.favorite_border)),
-                IconButton(onPressed: () {}, icon: Icon(Icons.edit_note))
+                IconButton(
+                    onPressed: () async {
+                      final result = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => Updatepage(task: task)));
+                      setState(() {
+                        if (result != task.content) {
+                          widget.content = result;
+                        }
+                      });
+                    },
+                    icon: Icon(Icons.edit_note))
               ],
             )));
   }
